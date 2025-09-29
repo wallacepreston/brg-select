@@ -28,6 +28,10 @@ const ButtonColumn = styled.div`
   flex-direction: column;
 `
 
+const PharmacyElem = styled.div<{selected?: boolean}>`
+  background-color: ${(props) => (props.selected ? 'lightgrey' : 'white')};
+`
+
 interface SelectLayoutProps {}
 
 type Pharmacy = {
@@ -58,6 +62,7 @@ const getPharmacies = async () => {
 
 export const SelectLayout: React.FC<SelectLayoutProps> = () => {
   const [pharmacies, setPharmacies] = useState<Pharmacy[]>([]);
+  const [toSelect, setToSelect] = useState<number | null>(null);
   
   const selected = pharmacies.filter(pharmacy => !!pharmacy.selected);
   const available = pharmacies.filter(pharmacy => !pharmacy.selected);
@@ -66,7 +71,8 @@ export const SelectLayout: React.FC<SelectLayoutProps> = () => {
     getPharmacies().then((pharms) => setPharmacies(pharms))
   }, [])
 
-  const handleSelect = (id: number) => {
+  const handleSelect = (id: number | null) => {
+    if (!id) return;
     const newPharmacies = pharmacies.map((pharmacy) => {
         return pharmacy.id === id ? {
           ...pharmacy,
@@ -77,7 +83,8 @@ export const SelectLayout: React.FC<SelectLayoutProps> = () => {
     setPharmacies(newPharmacies);
   }
 
-  const handleRemove = (id: number) => {
+  const handleRemove = (id: number | null) => {
+    if (!id) return;
     const newPharmacies = pharmacies.map((pharmacy) => {
         return pharmacy.id === id ? {
           ...pharmacy,
@@ -93,19 +100,19 @@ export const SelectLayout: React.FC<SelectLayoutProps> = () => {
       <div>available</div>
       <Card>
         {
-          available.map(pharmacy => <div key={pharmacy.id} onClick={() => handleSelect(pharmacy.id)}>{pharmacy.name}</div>)
+          available.map(pharmacy => <PharmacyElem selected={pharmacy.id === toSelect} key={pharmacy.id} onClick={() => setToSelect(pharmacy.id)}>{pharmacy.name}</PharmacyElem>)
         }
       </Card>
     </Column>
     <ButtonColumn>
-      <button>{'>>'}</button>
-      <button>{'<<'}</button>
+      <button onClick={() => handleSelect(toSelect)}>{'>>'}</button>
+      <button onClick={() => handleRemove(toSelect)}>{'<<'}</button>
     </ButtonColumn>
     <Column>
       <div>selected</div>
       <Card>
         {
-          selected.map(pharmacy => <div key={pharmacy.id} onClick={() => handleRemove(pharmacy.id)}>{pharmacy.name}</div>)
+          selected.map(pharmacy => <PharmacyElem selected={pharmacy.id === toSelect} key={pharmacy.id} onClick={() => setToSelect(pharmacy.id)}>{pharmacy.name}</PharmacyElem>)
         }
       </Card>
     </Column>
