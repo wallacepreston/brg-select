@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 const MainContainer = styled.div`
@@ -33,6 +33,7 @@ interface SelectLayoutProps {}
 type Pharmacy = {
   name: string;
   id: number;
+  selected?: boolean;
 }
 
 const DEFAULT_PHARMACIES = [
@@ -58,17 +59,41 @@ const getPharmacies = async () => {
 export const SelectLayout: React.FC<SelectLayoutProps> = () => {
   const [pharmacies, setPharmacies] = useState<Pharmacy[]>([]);
   
-
+  const selected = pharmacies.filter(pharmacy => !!pharmacy.selected);
+  const available = pharmacies.filter(pharmacy => !pharmacy.selected);
+  
   useEffect(() => {
     getPharmacies().then((pharms) => setPharmacies(pharms))
-  })
+  }, [])
+
+  const handleSelect = (id: number) => {
+    const newPharmacies = pharmacies.map((pharmacy) => {
+        return pharmacy.id === id ? {
+          ...pharmacy,
+          selected: true
+        } : pharmacy
+      }
+    )
+    setPharmacies(newPharmacies);
+  }
+
+  const handleRemove = (id: number) => {
+    const newPharmacies = pharmacies.map((pharmacy) => {
+        return pharmacy.id === id ? {
+          ...pharmacy,
+          selected: false
+        } : pharmacy
+      }
+    )
+    setPharmacies(newPharmacies);
+  }
 
   return <MainContainer>
     <Column>
       <div>available</div>
       <Card>
         {
-          pharmacies.map(pharmacy => <div key={pharmacy.id}>{pharmacy.name}</div>)
+          available.map(pharmacy => <div key={pharmacy.id} onClick={() => handleSelect(pharmacy.id)}>{pharmacy.name}</div>)
         }
       </Card>
     </Column>
@@ -80,7 +105,7 @@ export const SelectLayout: React.FC<SelectLayoutProps> = () => {
       <div>selected</div>
       <Card>
         {
-          pharmacies.map(pharmacy => <div key={pharmacy.id}>{pharmacy.name}</div>)
+          selected.map(pharmacy => <div key={pharmacy.id} onClick={() => handleRemove(pharmacy.id)}>{pharmacy.name}</div>)
         }
       </Card>
     </Column>
