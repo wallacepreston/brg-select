@@ -5,9 +5,7 @@ import { SelectLayout } from './views/SelectLayout';
 
 function App() {
   return (
-    <div className="App">
       <SelectLayout/>
-    </div>
   );
 }
 

@@ -1,5 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import './SelectLayout.css'
+import styled from 'styled-components';
+
+const MainContainer = styled.div`
+  padding: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+`
+
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+`
+
+const Card = styled.div`
+  border: 1px solid black;
+  border-radius: 16px;
+  padding: 16px;
+`
+
+const ButtonColumn = styled.div`
+  display:flex;
+  flex-direction: column;
+`
 
 interface SelectLayoutProps {}
 
@@ -36,24 +63,26 @@ export const SelectLayout: React.FC<SelectLayoutProps> = () => {
     getPharmacies().then((pharms) => setPharmacies(pharms))
   })
 
-  return <div className='main-containter'>
-    <div className='column'>
-      <div className='card'>
+  return <MainContainer>
+    <Column>
+      <div>available</div>
+      <Card>
         {
           pharmacies.map(pharmacy => <div key={pharmacy.id}>{pharmacy.name}</div>)
         }
-      </div>
-    </div>
-    <div className='button-column'>
+      </Card>
+    </Column>
+    <ButtonColumn>
       <button>{'>>'}</button>
       <button>{'<<'}</button>
-    </div>
-    <div className='column'>
-      <div className='card'>
+    </ButtonColumn>
+    <Column>
+      <div>selected</div>
+      <Card>
         {
           pharmacies.map(pharmacy => <div key={pharmacy.id}>{pharmacy.name}</div>)
         }
-      </div>
-    </div>
-  </div>
+      </Card>
+    </Column>
+  </MainContainer>
 }

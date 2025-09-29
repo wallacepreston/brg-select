@@ -1,5 +1,7 @@
 .main-container {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: space-between;
+  background-color: red;
 }
