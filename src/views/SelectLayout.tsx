@@ -1,36 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
+import './SelectLayout.css';
 
-const MainContainer = styled.div`
-  padding: 16px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-`
-
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-grow: 1;
-`
-
-const Card = styled.div`
-  border: 1px solid black;
-  border-radius: 16px;
-  padding: 16px;
-`
-
-const ButtonColumn = styled.div`
-  display:flex;
-  flex-direction: column;
-`
-
-const PharmacyElem = styled.div<{selected?: boolean}>`
-  background-color: ${(props) => (props.selected ? 'lightgrey' : 'white')};
-`
 
 interface SelectLayoutProps {}
 
@@ -95,26 +65,42 @@ export const SelectLayout: React.FC<SelectLayoutProps> = () => {
     setPharmacies(newPharmacies);
   }
 
-  return <MainContainer>
-    <Column>
+  return <div className="main-container">
+    <div className="column">
       <div>available</div>
-      <Card>
+      <div className="card">
         {
-          available.map(pharmacy => <PharmacyElem selected={pharmacy.id === toSelect} key={pharmacy.id} onClick={() => setToSelect(pharmacy.id)}>{pharmacy.name}</PharmacyElem>)
+          available.map(pharmacy => (
+            <div 
+              key={pharmacy.id} 
+              className={`pharmacy-elem ${pharmacy.id === toSelect ? 'selected' : ''}`}
+              onClick={() => setToSelect(pharmacy.id)}
+            >
+              {pharmacy.name}
+            </div>
+          ))
         }
-      </Card>
-    </Column>
-    <ButtonColumn>
+      </div>
+    </div>
+    <div className="button-column">
       <button onClick={() => handleSelect(toSelect)}>{'>>'}</button>
       <button onClick={() => handleRemove(toSelect)}>{'<<'}</button>
-    </ButtonColumn>
-    <Column>
+    </div>
+    <div className="column">
       <div>selected</div>
-      <Card>
+      <div className="card">
         {
-          selected.map(pharmacy => <PharmacyElem selected={pharmacy.id === toSelect} key={pharmacy.id} onClick={() => setToSelect(pharmacy.id)}>{pharmacy.name}</PharmacyElem>)
+          selected.map(pharmacy => (
+            <div 
+              key={pharmacy.id} 
+              className={`pharmacy-elem ${pharmacy.id === toSelect ? 'selected' : ''}`}
+              onClick={() => setToSelect(pharmacy.id)}
+            >
+              {pharmacy.name}
+            </div>
+          ))
         }
-      </Card>
-    </Column>
-  </MainContainer>
+      </div>
+    </div>
+  </div>
 }

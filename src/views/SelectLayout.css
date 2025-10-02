@@ -1,7 +1,43 @@
 .main-container {
+  padding: 16px;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: space-between;
-  background-color: red;
+  align-items: center;
+  gap: 8px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.card {
+  border: 1px solid black;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.button-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.pharmacy-elem {
+  background-color: white;
+  cursor: pointer;
+  padding: 8px;
+  margin: 4px 0;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.pharmacy-elem:hover {
+  background-color: #f0f0f0;
+}
+
+.pharmacy-elem.selected {
+  background-color: lightgrey;
 }
